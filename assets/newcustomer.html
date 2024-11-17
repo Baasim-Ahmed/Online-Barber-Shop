@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Service Form</title>
+    <style>
+        
+        .contact-form {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    border-radius: 10px;
+    padding: 30px;
+    width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: white;
+    margin-left:420px ;
+    margin-top: 100px;
+    
+    }
+
+    .contact-form h2 {
+        margin: 0 0 20px;
+        text-align: center;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: none;
+        border-radius: 5px;
+        outline: none;
+        font-size: 14px;
+    }
+
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder {
+        color: #999;
+    }
+
+    .contact-form button {
+        width: 100%;
+        padding: 10px;
+        background-color: #ff4081;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .contact-form button:hover {
+        background-color: #e73370;
+    }
+    </style>
+
+</head>
+<body>
+    <div class="contact-form">
+        <h2>Add Customer</h2>
+        <input type="text" name="name" placeholder="Your Name" required id="cust_name">
+        <input type="text" name="email" placeholder="email" required id="cust_email">
+        <input type="text" name="number" placeholder="Your Number without hyphens" required id="cust_number">
+        <input type="text" name="username" placeholder="username" required id="cust_username">
+        <input type="text" name="password" placeholder="Password" required id="cust_password">
+        <button onclick="addcustomer()">ADD</button>
+    </div>
+
+    <script>
+    async function addcustomer() {
+        const custName = document.getElementById('cust_name').value;
+        const custEmail = document.getElementById('cust_email').value;
+        let custNumber = document.getElementById('cust_number').value;
+        const custUsername = document.getElementById('cust_username').value;
+        const custPassword = document.getElementById('cust_password').value;
+
+        if (custNumber) {
+    // Convert custNumber to string and check its length
+        let custNumberStr = custNumber.toString();
+        if (custNumberStr.length != 11) {
+            alert("NUMBER SHOULD BE OF 11 DIGITS");
+            return false;
+        }
+        // Parse it back to an integer if needed
+        custNumber = parseInt(custNumberStr, 10);
+    }
+
+        
+        try {
+        const response = await fetch(`http://localhost:3000/api/fetchusernames?custUsername=${custUsername}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+
+
+        const results = await response.json();
+
+        if (results.length === 0) {
+            // Username does not exist, proceed with the next steps
+            console.log("Username is available, proceeding...");
+            // Continue with your form submission or other logic
+        } else {
+            alert("Username already exists, please choose a different one.");
+            return false;
+        }
+       
+    } catch (error) {
+        console.error('Error:', error);
+    }
+
+      try {
+          const response = await fetch('http://localhost:3000/api/AddCustomer', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ custName,custEmail,custNumber,custUsername,custPassword })
+          });
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+            }
+
+        // Retrieve the userType from the URL
+        
+          if (response.ok) {
+              alert("ACCOUNT CREATED")
+              const userType = getQueryParam('userType');
+              if (userType === 'admin'){
+                alert("REDIRECTING BACK TO ADMIN");
+                window.location.href = '/admin/admin_dashboard.html';
+              }
+              else{
+                window.location.href = 'login_cust.html'
+              }
+              // Handle success case
+          } 
+      } catch (error) {
+          console.error('API error:', error);
+      }
+    } 
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+  />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+      background-color: #f0f0f0;
+    }
+    .sidebar {
+      width: 250px;
+      background-color: #3f48cc;
+      color: #fff;
+      padding-top: 20px;
+      position: fixed;
+      height: 100%;
+    }
+    .sidebar h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar ul li {
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    .sidebar ul li:hover {
+      background-color: #575fcf;
+    }
+    .sidebar ul li i {
+      margin-right: 10px;
+    }
+    .main-content {
+      margin-left: 250px;
+      padding: 20px;
+      /* width: calc(100% - 250px); */
+    }
+    .card-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .card {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      flex: 1;
+      min-width: 200px;
+      text-align: center;
+    }
+    .card h3 {
+      margin-bottom: 10px;
+    }
+    .card p {
+      font-size: 24px;
+      margin: 0;
+    }
+    .submenu {
+      padding-left: 20px;
+    }
+   
+    .contact-form {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    border-radius: 10px;
+    padding: 30px;
+    width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: white;
+    margin-left:420px ;
+    margin-top: 100px;
+    
+    }
+
+    .contact-form h2 {
+        margin: 0 0 20px;
+        text-align: center;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: none;
+        border-radius: 5px;
+        outline: none;
+        font-size: 14px;
+    }
+
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder {
+        color: #999;
+    }
+
+    .contact-form button {
+        width: 100%;
+        padding: 10px;
+        background-color: #ff4081;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .contact-form button:hover {
+        background-color: #e73370;
+    }
+
+    #addServices{
+      height: 800px;
+    }
+
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 18px;
+        text-align: left;
+    }
+
+    thead tr {
+        background-color: #6a11cb;
+        color: #ffffff;
+        text-align: left;
+        font-weight: bold;
+    }
+
+    th, td {
+        padding: 12px 15px;
+    }
+
+    tbody tr {
+        border-bottom: 1px solid #dddddd;
+    }
+
+    tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+    }
+
+    tbody tr:last-of-type {
+        border-bottom: 2px solid #009879;
+    }
+
+    input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    }
+
+    input[type="text"]:focus {
+        border-color: #007BFF;
+        outline: none;
+    }
+
+    .subsectionsbuttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .subsectionsbuttons button {
+      padding: 10px 20px;
+      background-color: #3f48cc;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .subsectionsbuttons button:hover {
+      background-color: #575fcf;
+    }
+
+    .searchBarContainer {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        margin-bottom: 10px; /* Add some space below the search bars */
+    }
+
+    .searchBar {
+        width: 48%; /* Adjust the width as needed */
+    }
+
+    .searchInput {
+        width: 100%;
+        box-sizing: border-box; /* Include padding and border in the width */
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+    
+
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h1>THE TRADITIONAL TRIM</h1>
+    <ul>
+      <li onclick="showDashboard()">
+        <i class="fas fa-tachometer-alt"></i>Dashboard
+      </li>
+      <li onclick="showServices()">
+        <i class="fas fa-concierge-bell"></i>Services
+      </li>
+
+      <li onclick="showAppointments()">
+        <i class="fas fa-calendar-check"></i>Appointment
+      </li>
+      
+      <li onclick="showCustomer()">
+        <i class="fas fa-user-plus"></i>Customers
+      </li>
+     
+      <li onclick="showInvoices()">
+        <i class="fas fa-file-invoice"></i>Invoices
+      </li>
+      <li onclick="showEmployees()"><i class="fas fa-users"></i>Employees</li>
+    </ul>
+  </div>
+  <div class="main-content" id="main-content">
+    <!-- Default content will be Dashboard -->
+    <div class="card-container" id="dashboard">
+      <div class="card">
+        <h3 >Total Customer</h3>
+        <p id="customerscount"></p>
+      </div>
+      <div class="card">
+        <h3>Total Appointment</h3>
+        <p id="appointmentscount"></p>
+      </div>
+     
+      <div class="card">
+        <h3 >Total Services</h3>
+        <p id="servicescount"></p>
+      </div>
+      <div class="card">
+        <h3>Today Sales</h3>
+        <p id="todaysales">0</p>
+      </div>
+      <div class="card">
+        <h3 >Last 7 Days Sales</h3>
+        <p id="lastweeksales"></p>
+      </div>
+      <div class="card">
+        <h3>Total Sales</h3>
+        <p id="totalsales"></p>
+      </div>
+    </div>
+    <div id="services">
+      <h2>Services</h2>
+      <div class="subsectionsbuttons">
+        <button onclick="showAddServices()">Add Services</button>
+        <button onclick="showManageServices()">Manage Services</button>
+        <button onclick="showNotactiveServices()">Currently Offline Services</button>
+      </div>
+    
+      <div id="addServices" style="display: none;">
+        <div class="contact-form">
+          <h2>Add Service</h2>
+          <input type="text" name="name" placeholder="Service Name" required id="service-name">
+          <input type="text" name="cost" placeholder="Cost" required id="service-cost">
+          <textarea name="Description" placeholder="Description" required id="service-description"></textarea>
+          <button onclick="addservice()">ADD</button>
+        </div>
+      </div>
+    
+      <div id="manageServices" style="display: none; width: 1200px;">
+        <table style="width: 100%;">
+          <thead>
+            <tr>
+              <th>Number</th>
+              <th>Name</th>
+              <th>Cost</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="serviceTableBody">
+          
+          </tbody>
+        </table>
+      </div>
+    
+      <div id="notactiveservices" style="display: none; width: 1200px;">
+        
+        <table style="width: 100%;">
+          <thead>
+            <tr>
+              <th>Number</th>
+              <th>Name</th>
+              <th>Cost</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="NotActiveServicesTableBody">
+        
+          </tbody>
+        </table>
+      </div>
+    
+      <div id="editService" style="display: none;">
+        <div class="contact-form">
+          <h2>Edit Service</h2>
+          <input type="text" name="name" required id="ser_name">
+          <input type="text" name="cost" required id="ser_cost">
+          <textarea name="Description" required id="ser_desc"></textarea>
+          <input type="hidden" id="ser_id">
+          <button onclick="update_service()">UPDATE</button>
+        </div>
+      </div>
+    
+    </div>
+ 
+    <div id="appointments" style="display: none;width: 1200px;">
+      <h2>Appointments</h2>
+      <div class="searchBarContainer">
+        <div class="searchBar">
+            <input type="text" id="searchInputId" class="searchInput" placeholder="Search by ID...">
+        </div>
+        <div class="searchBar">
+            <input type="text" id="searchInputName" class="searchInput" placeholder="Search by Name...">
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Apt No</th>
+            <th>Customer Name</th>
+            <th>Date </th>
+            <th>Time</th>
+            <th>Employee</th>
+            <th>Remarks</th>
+          </tr>
+        </thead>
+        <tbody id="appoinmentTableBody">
+          <!-- Dynamic content will be added here -->
+        </tbody>
+      </table>
+    </div>
+
+    <div id="Customers" style="display: none">
+      <h2>Customers</h2>
+      <div class="subsectionsbuttons">
+        <div class="searchBarContainer" style="width: 700px; height: 40px">
+          <div class="searchBar" style="width: 650px; height: 100%;">
+            <input type="text" id="customernameinput" class="searchInput" placeholder="Search by name...">
+          </div>
+        </div>
+        <button onclick="showaddcust()" style="width: 500px;font-size: 17px;">Add Customer</button>
+        <!-- <button onclick="showCustomerList()">Customers List</button> -->
+      </div>
+      <div id="addCustomer" style="display: none">
+        
+      </div>
+     
+      <table style="width: 1200px;">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Username</th>
+            <th>Password</th>
+          </tr>
+        </thead>
+        <tbody id="CustomerTableBody">
+          <!-- Dynamic content will be added here -->
+        </tbody>
+      </table>
+  
+
+  
+
+    </div>
+  
+    <div id="invoices" style="display: none;">
+      <h2>Invoices</h2>
+      <div class="searchBarContainer" >
+        <div class="searchBar" style="width: 1200px;">
+            <input type="text" id="searchAptIdinvoice" class="searchInput" placeholder="Search by ID...">
+        </div>
+        
+      </div>
+      <table >
+        <thead>
+          <tr>
+            <th>Serial No</th>
+            <th>Apt No</th>
+            <th>Customer Name</th>
+            <th>Reciept </th>
+            
+          </tr>
+        </thead>
+        <tbody id="invoiceTableBody">
+          <!-- Dynamic content will be added here -->
+        </tbody>
+      </table>
+    </div>
+
+    <div id="employees" style="display: none">
+      <h2>Employees</h2>
+      <div class="subsectionsbuttons">
+        <button onclick="showAddEmployee()">Add Employee</button>
+        <button onclick="showManageEmployees()">Manage Employees</button>
+      </div>
+      <div id="addEmployee" style="display: none">
+        <div class="contact-form">
+          <h2>Add Employee</h2>
+          <input type="text" name="name" placeholder="Employee Name" required id="employee-name">
+          <input type="text" name="number" placeholder="Phone Number" required id="employee-phonenumber">
+          <input type="text" name="salary" placeholder="Salary" required id="employee-salary">
+          <input type="text" name="email" placeholder="Email" required id="employee-email">
+          <button onclick="addEmployee()">ADD</button>
+        </div>
+      </div>
+      <div id="manageEmployees" style="display: none;width: 1200px;">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Salary</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="employeeTableBody">
+            <!-- Dynamic content will be added here -->
+          </tbody>
+        </table>
+      </div>
+      <div id="editEmployee" style="display: none">
+        <div class="contact-form">
+          <h2>Edit Employee</h2>
+          <input type="text" name="name" required id="emp_name">
+          <input type="text" name="phone" required id="emp_phone">
+          <input type="text" name="salary" required id="emp_salary">
+          <input type="text" name="email" required id="emp_email">
+          <input type="hidden" id="emp_id">
+          <button onclick="updateEmployee()">UPDATE</button>
+        </div>
+      </div>
+    </div>
+    
+
+  </div>
+  <script>
+    async function fetchAppointmentCount() {
+        try {
+            const response = await fetch('http://localhost:3000/api/appointmentscount');
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            const appointmentCountElement = document.getElementById('appointmentscount');
+            appointmentCountElement.textContent = data.apt_count; // Update the text content with the count
+        } catch (error) {
+            console.error('Error fetching appointment count:', error);
+        }
+    }
+
+    async function fetchCustomersCount() {
+        try {
+            const response = await fetch('http://localhost:3000/api/customerscount');
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            const appointmentCountElement = document.getElementById('customerscount');
+            appointmentCountElement.textContent = data.cust_count; // Update the text content with the count
+        } catch (error) {
+            console.error('Error fetching appointment count:', error);
+        }
+    }
+
+    async function fetchServicesCount() {
+        try {
+            const response = await fetch('http://localhost:3000/api/servicescount');
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            const appointmentCountElement = document.getElementById('servicescount');
+            appointmentCountElement.textContent = data.ser_count; // Update the text content with the count
+        } catch (error) {
+            console.error('Error fetching appointment count:', error);
+        }
+    }
+
+    async function fetchtodaysales() {
+        try {
+            const response = await fetch('http://localhost:3000/api/todaysales');
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            let appointmentCountElement = document.getElementById('todaysales');
+            appointmentCountElement.textContent = data.today_sales; // Update the text content with the count
+            if(data.today_sales === null){
+              appointmentCountElement.textContent = 0;
+            }
+            
+        } catch (error) {
+            console.error('Error fetching appointment count:', error);
+        }
+    }
+
+    async function lastweeksales() {
+        try {
+            const response = await fetch('http://localhost:3000/api/lastweeksales');
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            let appointmentCountElement = document.getElementById('lastweeksales');
+            appointmentCountElement.textContent = data.lastweek_sales; // Update the text content with the count
+            if(data.lastweek_sales === null){
+              appointmentCountElement.textContent = 0;
+            }
+        } catch (error) {
+            console.error('Error fetching appointment count:', error);
+        }
+    }
+
+    async function totalsales() {
+        try {
+            const response = await fetch('http://localhost:3000/api/totalsales');
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            const appointmentCountElement = document.getElementById('totalsales');
+            appointmentCountElement.textContent = data.total_sales; // Update the text content with the count
+        } catch (error) {
+            console.error('Error fetching appointment count:', error);
+        }
+    }
+    
+    function hideAllSections() {
+      document.getElementById("dashboard").style.display = "none";
+      document.getElementById("services").style.display = "none";
+      document.getElementById("appointments").style.display = "none";
+      document.getElementById("Customers").style.display = "none";
+      document.getElementById("invoices").style.display = "none";
+      document.getElementById("employees").style.display="none";
+    }
+
+    function hideServiceSubsections() {
+      document.getElementById("addServices").style.display = "none";
+      document.getElementById("manageServices").style.display = "none";
+      document.getElementById("notactiveservices").style.display = "none";
+    }
+
+    function showDashboard() {
+      hideServiceSubsections();
+      hideAllSections();
+      document.getElementById("dashboard").style.display = "flex";
+      fetchAppointmentCount();
+      fetchCustomersCount();
+      fetchServicesCount();
+      fetchtodaysales();
+      lastweeksales();
+      totalsales();
+    }
+
+    function showServices() {
+      hideAllSections();
+      document.getElementById("services").style.display = "block";
+      showAddServices(); // Show Add Services by default when Services is clicked
+    }
+
+    function showEmployees() {
+      hideAllSections();
+      document.getElementById("employees").style.display = "block";
+      showAddEmployee(); // Show Add Services by default when Services is clicked
+    }
+
+    function showAppointments() {
+      hideServiceSubsections();
+      hideAllSections();
+      document.getElementById("appointments").style.display = "block";
+      fetchAppointments();      
+    }
+
+    function showCustomer() {
+      hideServiceSubsections();
+      hideAllSections();
+      document.getElementById("Customers").style.display = "block";
+      customerlist();
+
+    }
+
+    // function showCustomerList() {
+    //   hideServiceSubsections();
+    //   hideAllSections();
+    //   document.getElementById("customerList").style.display = "block";
+    // }
+
+    function showInvoices() {
+      hideServiceSubsections();
+      hideAllSections();
+      document.getElementById("invoices").style.display = "block";
+      fetchinvoices();
+    }
+
+    function showAddServices() {
+      hideServiceSubsections();
+      document.getElementById("addServices").style.display = "block";
+    }
+
+    function showManageServices() {
+      hideServiceSubsections();
+      document.getElementById("manageServices").style.display = "block";
+      fetchServices();
+    }
+    
+    
+    
+    function showAddEmployee() {
+      hideEmployeeSubsections();
+      document.getElementById("addEmployee").style.display = "block";
+      document.getElementById("editEmployee").style.display = "none";
+
+    // Show Add Employee by default when Employees is clicked
+  }
+
+    function hideEmployeeSubsections() {
+      document.getElementById("addEmployee").style.display = "none";
+      document.getElementById("manageEmployees").style.display = "none";
+      // document.getElementById("manageEmployees").style.display = "none";
+    }
+
+    function showaddcust() {
+      hideEmployeeSubsections();
+      document.getElementById("addEmployee").style.display = "block";
+      addCustomer();
+    }
+
+   function showManageEmployees() {
+    hideEmployeeSubsections();
+    document.getElementById("manageEmployees").style.display = "block";
+    fetchEmployees();
+  }
+
+  function showNotactiveServices() {
+
+      hideServiceSubsections();
+      // document.getElementById("editService").style.display = "none";
+      document.getElementById("notactiveservices").style.display = "block";
+      // document.getElementById("manageServices").style.display = "none";
+
+      fetchNotactiveServices();
+    }
+
+
+    // Show dashboard by default
+    showDashboard();
+  </script>
+
+  <script>
+    async function addservice() {
+      const serviceName = document.getElementById('service-name').value;
+      const serviceDescription = document.getElementById('service-description').value;
+      const Cost = document.getElementById('service-cost').value;
+      
+      const service_stat = '';
+
+      try {
+          const response = await fetch('http://localhost:3000/api/AddService', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ serviceName, serviceDescription, Cost,service_stat })
+          });
+
+          if (response.ok) {
+              alert("SERVICE ADDED")
+              // Handle success case
+          } else {
+            
+              // Handle error case
+          }
+      } catch (error) {
+          console.error('API error:', error);
+      }
+      document.getElementById('service-name').value = '';
+      document.getElementById('service-description').value = '';
+      document.getElementById('service-cost').value = '';
+      
+    } 
+
+  async function deleteService(id) {
+      const response = await fetch(`http://localhost:3000/api/DeleteService/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 0 }),
+      });
+      fetchServices();
+}
+  
+  async function fetchServices() {
+    document.getElementById("editService").style.display = "none";
+      try {
+
+        const url = new URL('http://localhost:3000/api/fetchServiceNames');
+        url.searchParams.append('status', 1);
+
+        const response = await fetch(url);
+
+        const services = await response.json();
+
+
+        const tableBody = document.getElementById('serviceTableBody');
+        tableBody.innerHTML = ''; // Clear existing table rows
+
+          services.forEach((service, index) => {
+          const row = document.createElement('tr');
+
+          const cellIndex = document.createElement('td');
+          cellIndex.textContent = service.ID;
+          row.appendChild(cellIndex);
+
+          const cellName = document.createElement('td');
+          cellName.textContent = service.ServiceName;
+          row.appendChild(cellName);
+
+          const cellPrice = document.createElement('td');
+          cellPrice.textContent = service.Cost;
+          row.appendChild(cellPrice);
+
+          
+
+          const cellAction = document.createElement('td');
+          const actionDiv = document.createElement('div');
+          actionDiv.classList.add('action-buttons');
+
+          const editIcon = document.createElement('i');
+          editIcon.classList.add('fas', 'fa-edit');
+          editIcon.setAttribute('title', 'Edit');
+          editIcon.style.marginRight = '20px' 
+          editIcon.style.cursor = 'pointer'
+          editIcon.onclick = () => editService(service.ID,service.ServiceName,service.Cost,service.Description);
+          
+          const deleteIcon = document.createElement('i');
+          deleteIcon.classList.add('fas', 'fa-trash');
+          deleteIcon.setAttribute('title', 'Delete');
+          deleteIcon.style.cursor = 'pointer'
+          deleteIcon.onclick = () => deleteService(service.ID);
+         
+          actionDiv.appendChild(editIcon);
+          actionDiv.appendChild(deleteIcon);
+
+          cellAction.appendChild(actionDiv);
+          row.appendChild(cellAction);
+
+          tableBody.appendChild(row);
+        });
+      } catch (error) {
+        
+        console.error('Error fetching services:', error);
+      }
+    }
+    
+  function editService(service_id,service_name,service_cost,service_description) {
+      hideServiceSubsections();
+      const serviceNameElement = document.getElementById('ser_name')
+      const serviceCostElement = document.getElementById('ser_cost');
+      const serviceDescriptionElement = document.getElementById('ser_desc');
+      const serviceIdElement = document.getElementById('ser_id');
+      document.getElementById('editService').style.display = 'block';
+
+      serviceNameElement.value = service_name;
+      serviceCostElement.value = service_cost;
+      serviceDescriptionElement.value = service_description;
+      serviceIdElement.value = service_id;
+
+    }
+
+  function update_service(){
+    
+      const updatedService = {
+        name: document.getElementById('ser_name').value,
+        cost: document.getElementById('ser_cost').value,
+        description: document.getElementById('ser_desc').value,
+        id: document.getElementById('ser_id').value,
+      };
+
+      // Send updated service data to the server
+        fetch('http://localhost:3000/api/updateService', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedService)
+        })
+        hideServiceSubsections(); // Hide the edit form
+        document.getElementById("manageServices").style.display = "block"; // Show the manage services section
+        fetchServices(); // Fetch updated services
+        document.getElementById("editService").style.display = "none";
+        alert('Service updated successfully');
+    }
+
+  async function fetchNotactiveServices() {
+    document.getElementById("editService").style.display = "none";
+  try {
+    const url = new URL('http://localhost:3000/api/fetchServiceNames');
+    url.searchParams.append('status', 0);
+
+    const response = await fetch(url);
+    const services = await response.json();
+
+    const tableBody = document.getElementById('NotActiveServicesTableBody');
+    tableBody.innerHTML = ''; // Clear existing table rows
+
+    services.forEach((service, index) => {
+
+      const row = document.createElement('tr');
+
+      const cellIndex = document.createElement('td');
+      cellIndex.textContent = service.ID;
+      row.appendChild(cellIndex);
+
+      const cellName = document.createElement('td');
+      cellName.textContent = service.ServiceName;
+      row.appendChild(cellName);
+
+      const cellPrice = document.createElement('td');
+      cellPrice.textContent = service.Cost;
+      row.appendChild(cellPrice);
+
+      const cellAction = document.createElement('td');
+      const actionDiv = document.createElement('div');
+      actionDiv.classList.add('action-buttons');
+
+      const activateIcon = document.createElement('i');
+      activateIcon.classList.add('fas', 'fa-check');
+      activateIcon.setAttribute('title', 'Make Active');
+      activateIcon.style.cursor = 'pointer';
+      activateIcon.onclick = () => makeServiceActive(service.ID);
+
+      actionDiv.appendChild(activateIcon);
+      cellAction.appendChild(actionDiv);
+      row.appendChild(cellAction);
+
+      // Append the row to the table body
+      tableBody.appendChild(row);
+    });
+ 
+  } catch (error) {
+    console.error('Error fetching services:', error);
+  }
+}
+
+  async function makeServiceActive(id) {
+    const response = await fetch(`http://localhost:3000/api/DeleteService/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ status: 1 }),
+    });
+    fetchNotactiveServices();
+}
+    
+    
+
+  </script>
+
+
+  
+
+  <script>
+    
+
+  async function addEmployee() {
+    document.getElementById("editEmployee").style.display = "none";
+    // document.getElementById("manageEmployees").style.display = "none";
+    const employee_name = document.getElementById('employee-name').value;
+    const employee_number = document.getElementById('employee-phonenumber').value;
+    const employee_email = document.getElementById('employee-email').value;
+    const employee_salary = document.getElementById('employee-salary').value;
+    const employee_appointdate = ''; 
+    const employee_status = '';
+
+    try {
+        const response = await fetch('http://localhost:3000/api/AddEmployee', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ employee_name, employee_number, employee_email, employee_salary,employee_appointdate,employee_status })
+        });
+
+        if (response.ok) {
+            alert("EMPLOYEE ADDED");
+            // Handle success case
+        } else {
+            // Handle error case
+        }
+    } catch (error) {
+        console.error('API error:', error);
+    }
+    document.getElementById('employee-name').value = '';
+    document.getElementById('employee-phonenumber').value = '';
+    document.getElementById('employee-email').value = '';
+    document.getElementById('employee-salary').value = '';
+  }
+
+  async function deleteEmployee(id) {
+    const response = await fetch(`http://localhost:3000/api/DeleteEmployee/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    fetchEmployees();
+  }
+
+  async function fetchEmployees() {
+    document.getElementById("editEmployee").style.display = "none";
+    try {
+      const response = await fetch('http://localhost:3000/api/barbers');
+      const employees = await response.json();
+
+      const tableBody = document.getElementById('employeeTableBody');
+      tableBody.innerHTML = ''; // Clear existing table rows
+
+      employees.forEach((employee, index) => {
+        const row = document.createElement('tr');
+
+        const cellIndex = document.createElement('td');
+        cellIndex.textContent = employee.ID;
+        row.appendChild(cellIndex);
+
+        const cellName = document.createElement('td');
+        cellName.textContent = employee.EmpName;
+        row.appendChild(cellName);
+
+        const cellSalary = document.createElement('td');
+        cellSalary.textContent = employee.Salary;
+        row.appendChild(cellSalary);
+
+
+        const cellAction = document.createElement('td');
+        const actionDiv = document.createElement('div');
+        actionDiv.classList.add('action-buttons');
+
+        const editIcon = document.createElement('i');
+        editIcon.classList.add('fas', 'fa-edit');
+        editIcon.setAttribute('title', 'Edit');
+        editIcon.style.marginRight = '20px';
+        editIcon.style.cursor = 'pointer';
+        editIcon.onclick = () => editEmployee(employee.ID, employee.EmpName,employee.EmpNumber, employee.EmpEmail,employee.Salary);
+
+        const deleteIcon = document.createElement('i');
+        deleteIcon.classList.add('fas', 'fa-trash');
+        deleteIcon.setAttribute('title', 'Delete');
+        deleteIcon.style.cursor = 'pointer';
+        deleteIcon.onclick = () => deleteEmployee(employee.ID);
+
+        actionDiv.appendChild(editIcon);
+        actionDiv.appendChild(deleteIcon);
+
+        cellAction.appendChild(actionDiv);
+        row.appendChild(cellAction);
+
+        tableBody.appendChild(row);
+        
+      });
+    } catch (error) {
+      console.error('Error fetching employees:', error);
+    }
+  }
+
+  function editEmployee(emp_id, emp_name,emp_phone, emp_email, emp_salary) {
+    hideEmployeeSubsections();    
+    const empNameElement = document.getElementById('emp_name');
+    const empPhoneNumberElement = document.getElementById('emp_phone');
+    const empSalaryElement = document.getElementById('emp_salary');
+    const empIdElement = document.getElementById('emp_id');
+    const empEmailElement = document.getElementById('emp_email');
+    document.getElementById('editEmployee').style.display = 'block';
+
+    empNameElement.value = emp_name;
+    empPhoneNumberElement.value = emp_phone;
+    empSalaryElement.value = emp_salary;
+    empIdElement.value = emp_id;
+    empEmailElement.value = emp_email
+
+  }
+
+  async function updateEmployee() {
+
+    const updatedEmployee = {
+      name: document.getElementById('emp_name').value,
+      phone: document.getElementById('emp_phone').value,
+      salary: document.getElementById('emp_salary').value,
+      email: document.getElementById('emp_email').value,
+      id: document.getElementById('emp_id').value,
+    };
+
+    try {
+      await fetch('http://localhost:3000/api/updateEmployee', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedEmployee),
+      });
+      hideEmployeeSubsections(); // Hide the edit form
+      document.getElementById("manageEmployees").style.display = "block"; // Show the manage employees section
+      fetchEmployees(); // Fetch updated employees
+      document.getElementById("editEmployee").style.display = "none";
+      alert('Employee updated successfully');
+    } catch (error) {
+      console.error('Error updating employee:', error);
+    }
+  }
+
+  async function fetchAppointments() {
+    const Id = document.getElementById('searchInputId').value
+    const Name = document.getElementById('searchInputName').value
+
+    try {
+
+      const url = new URL('http://localhost:3000/api/fetchAppointments');
+      url.searchParams.append('Id', Id);
+      url.searchParams.append('Name', Name);
+
+      const response = await fetch(url);
+      const appointments = await response.json();
+
+      const tableBody = document.getElementById('appoinmentTableBody');
+      tableBody.innerHTML = ''; // Clear existing table rows
+
+          appointments.forEach((appointment, index) => {
+            
+            const row = document.createElement('tr');
+
+            const cellIndex = document.createElement('td');
+            cellIndex.textContent = appointment.ID;
+            row.appendChild(cellIndex);
+
+            const cellName = document.createElement('td');
+            cellName.textContent = appointment.Name;
+            row.appendChild(cellName);
+
+            const cellDate = document.createElement('td');
+            cellDate.textContent = appointment.AptDate.split("T")[0];
+            row.appendChild(cellDate);
+
+            const celltime = document.createElement('td');
+            celltime.textContent = appointment.TimeSlots;
+            row.appendChild(celltime);
+
+            const cellEmpName = document.createElement('td');
+            cellEmpName.textContent = appointment.EmpName;
+            row.appendChild(cellEmpName);
+            
+            const cellRemarks = document.createElement('td');
+              if (appointment.Remarks == '') {
+    
+                  const remarksInput = document.createElement('input');
+                  remarksInput.type = 'text';
+                  remarksInput.value = '';
+                  remarksInput.addEventListener('keydown', function(event) {
+                      if (event.key === 'Enter') {
+                          handleRemarksUpdate(remarksInput.value, appointment.ID );
+                          cellRemarks.textContent = remarksInput.value;
+                      }
+                  });
+                  cellRemarks.appendChild(remarksInput);
+              } else {
+                  cellRemarks.textContent = appointment.Remarks;
+              }
+              row.appendChild(cellRemarks);
+
+              tableBody.appendChild(row);
+            
+
+            
+          });
+      
+    } catch (error) {
+        console.error('Error fetching appointments:', error);
+    }
+}
+
+    document.getElementById('searchInputId').addEventListener('keyup', async (event) => {
+      await fetchAppointments();
+        
+    });
+
+    document.getElementById('searchInputName').addEventListener('keyup', async (event) => {
+      await fetchAppointments();
+  });
+
+  async function handleRemarksUpdate(Remarks, appointmentID) {
+    try {
+        const response = await fetch('http://localhost:3000/api/UpdateRemarks', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                Remarks: Remarks,
+                ID: appointmentID
+            })
+        });
+    } catch (error) {
+        console.error('Error updating remarks:', error);
+    }
+    
+}
+  
+async function fetchinvoices() {
+    const Id = document.getElementById('searchAptIdinvoice').value;
+
+    try {
+
+      const url = new URL('http://localhost:3000/api/fetchinvoices');
+      if (Id) {
+      url.searchParams.append('Id', Id);
+    }
+      
+
+      const response = await fetch(url);
+      const invoices = await response.json();
+
+      const tableBody = document.getElementById('invoiceTableBody');
+      tableBody.innerHTML = ''; // Clear existing table rows
+      let serialno = 1;
+ 
+          invoices.forEach((invoice, index) => {
+            
+            const row = document.createElement('tr');
+
+            const cellNo = document.createElement('td');
+            cellNo.textContent = serialno;
+            row.appendChild(cellNo);
+            serialno += 1;
+
+            const cellIndex = document.createElement('td');
+            cellIndex.textContent = invoice.ID;
+            row.appendChild(cellIndex);
+
+            const cellName = document.createElement('td');
+            cellName.textContent = invoice.Name;
+            row.appendChild(cellName);
+
+            const cellAction = document.createElement('td');
+            const actionDiv = document.createElement('div');
+            actionDiv.classList.add('action-buttons');
+
+            const printIcon = document.createElement('i');
+            printIcon.classList.add('fas', 'fa-print');
+            printIcon.setAttribute('title', 'print');
+            printIcon.style.cursor = 'pointer'
+
+            actionDiv.appendChild(printIcon);
+
+            cellAction.appendChild(actionDiv);
+            row.appendChild(cellAction);
+
+            
+
+              
+            tableBody.appendChild(row);
+            
+
+            
+          });
+      
+    } catch (error) {
+        console.error('Error fetching appointments:', error);
+    }  
+}
+  document.getElementById('searchAptIdinvoice').addEventListener('keyup', async (event) => {
+      await fetchinvoices();
+    });
+
+    function addCustomer(){
+      const userType = 'admin'; // or 'admin'
+      alert("REDIRECTING TO ADD CUSTOMER PAGE");
+        window.location.href = `../newcustomer.html?userType=${userType}`;
+    }
+  
+    async function customerlist(){
+  
+      const Name = document.getElementById('customernameinput').value
+
+      try {
+
+        const url = new URL('http://localhost:3000/api/fetchCustomers');
+        url.searchParams.append('Name', Name);
+
+        const response = await fetch(url);
+        const customers = await response.json();
+
+        const tableBody = document.getElementById('CustomerTableBody');
+        tableBody.innerHTML = ''; // Clear existing table rows
+
+            customers.forEach((customer, index) => {
+              
+              const row = document.createElement('tr');
+
+              const cellIndex = document.createElement('td');
+              cellIndex.textContent = customer.ID;
+              row.appendChild(cellIndex);
+
+              const cellName = document.createElement('td');
+              cellName.textContent = customer.Name;
+              row.appendChild(cellName);
+
+              const cellmail = document.createElement('td');
+              cellmail.textContent = customer.Email;
+              row.appendChild(cellmail);
+
+              const cellphone = document.createElement('td');
+              cellphone.textContent = customer.MobileNumber;
+              row.appendChild(cellphone);
+
+              const cellusername = document.createElement('td');
+              cellusername.textContent = customer.username;
+              row.appendChild(cellusername);
+
+              const cellpassword = document.createElement('td');
+              cellpassword.textContent = customer.Password;
+              row.appendChild(cellpassword);
+              
+              
+                tableBody.appendChild(row);
+              
+
+              
+            });
+        
+      } catch (error) {
+          console.error('Error fetching appointments:', error);
+      }
+      
+    }
+    document.getElementById('customernameinput').addEventListener('keyup', async (event) => {
+      await customerlist();
+    });
+
+    
+ 
+ </script>
+</body>
+</html>
+
+
+
